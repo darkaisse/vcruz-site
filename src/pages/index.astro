@@ -181,11 +181,80 @@
     .photo-corner.tr { top:6px;    right:6px; border-top:2px solid var(--accent); border-right:2px solid var(--accent); }
     .photo-corner.bl { bottom:6px; left:6px;  border-bottom:2px solid var(--accent); border-left:2px solid var(--accent); }
     .photo-corner.br { bottom:6px; right:6px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); }
-    .photo-frame img { width:100%; height:100%; object-fit:cover; display:block; filter:grayscale(15%) contrast(1.1) brightness(0.9); }
-    .photo-scan {
-      position:absolute; left:0; right:0; height:2px; z-index:2;
-      background:linear-gradient(90deg,transparent,var(--accent),transparent);
-      animation:scan 3s ease-in-out infinite;
+
+    .photo-frame img {
+      width:100%; height:100%; object-fit:cover; display:block;
+      filter:grayscale(15%) contrast(1.1) brightness(0.9);
+      animation:imgGlitch 6s infinite;
+    }
+    @keyframes imgGlitch {
+      0%,78%,100% {
+        filter:grayscale(15%) contrast(1.1) brightness(0.9);
+        transform:none; clip-path:none;
+      }
+      79% {
+        filter:grayscale(0%) contrast(1.3) brightness(1) hue-rotate(180deg) saturate(3);
+        transform:translate(-3px,1px) scaleX(1.01);
+        clip-path:polygon(0 0,100% 0,100% 33%,0 33%);
+      }
+      80% {
+        filter:grayscale(0%) contrast(1.4) brightness(0.8) hue-rotate(-180deg) saturate(4);
+        transform:translate(4px,-2px) scaleX(0.99);
+        clip-path:polygon(0 33%,100% 33%,100% 66%,0 66%);
+      }
+      81% {
+        filter:grayscale(0%) contrast(1.5) brightness(1.1) hue-rotate(90deg) saturate(5);
+        transform:translate(-5px,3px);
+        clip-path:polygon(0 66%,100% 66%,100% 100%,0 100%);
+      }
+      82% {
+        filter:grayscale(15%) contrast(1.1) brightness(0.9);
+        transform:translate(2px,-1px);
+        clip-path:none;
+      }
+      83%,100% {
+        filter:grayscale(15%) contrast(1.1) brightness(0.9);
+        transform:none; clip-path:none;
+      }
+    }
+
+    .photo-glitch {
+      position:absolute; inset:0; z-index:2; pointer-events:none;
+      animation:overlayGlitch 6s infinite;
+      mix-blend-mode:color-dodge;
+    }
+    .photo-glitch::before {
+      content:''; position:absolute;
+      left:0; right:0; height:2px;
+      background:var(--accent);
+      opacity:0;
+      animation:scanBar 6s infinite;
+    }
+    .photo-glitch::after {
+      content:''; position:absolute; inset:0;
+      background:repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,200,255,0.03) 2px,
+        rgba(0,200,255,0.03) 4px
+      );
+      opacity:0.5;
+    }
+    @keyframes overlayGlitch {
+      0%,78%,84%,100% { opacity:0; }
+      79%  { opacity:1; background:rgba(255,51,85,0.15);  transform:translate(-4px,0); }
+      80%  { opacity:1; background:rgba(0,200,255,0.15);  transform:translate(4px,0);  }
+      81%  { opacity:1; background:rgba(0,255,157,0.1);   transform:translate(-2px,2px); }
+      82%  { opacity:1; background:rgba(255,140,0,0.1);   transform:translate(0,-2px); }
+      83%  { opacity:0; }
+    }
+    @keyframes scanBar {
+      0%,78%,84%,100% { opacity:0; top:0; }
+      79%  { opacity:1; top:20%;  box-shadow:0 0 8px var(--accent); }
+      80%  { opacity:1; top:55%;  box-shadow:0 0 12px var(--red); background:var(--red); }
+      81%  { opacity:1; top:80%;  box-shadow:0 0 8px var(--green); background:var(--green); }
+      82%  { opacity:0; top:100%; }
     }
     .about-text {
       font-size:1.05rem; line-height:1.9; font-weight:500; color:var(--text); margin-bottom:2rem;
@@ -437,7 +506,7 @@
   <div class="about-grid">
     <div class="reveal">
       <div class="photo-frame">
-        <div class="photo-scan"></div>
+        <div class="photo-glitch"></div>
         <div class="photo-corner tl"></div>
         <div class="photo-corner tr"></div>
         <div class="photo-corner bl"></div>
