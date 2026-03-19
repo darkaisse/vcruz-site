@@ -793,6 +793,20 @@
 </footer>
 
 <script>
+  // PARALLAX
+  const hexBg     = document.querySelector('.hex-bg');
+  const heroRadar = document.querySelector('.hero-radar');
+  const heroContent = document.querySelector('.hero-content');
+  const threatMap = document.querySelector('.threat-map');
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (hexBg)       hexBg.style.transform       = `translateY(${y * 0.15}px)`;
+    if (heroRadar)   heroRadar.style.transform    = `translateY(calc(-50% + ${y * 0.35}px))`;
+    if (heroContent) heroContent.style.transform  = `translateY(${y * 0.18}px)`;
+    if (threatMap)   threatMap.style.transform    = `translateY(${y * 0.08}px)`;
+  }, { passive: true });
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((e, i) => {
       if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 100);
